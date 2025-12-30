@@ -1,0 +1,294 @@
+/* Custom fonts - Using bold, playful sans-serif */
+@import url('https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,400;12..96,600;12..96,700;12..96,800&family=Space+Mono:wght@400;700&display=swap');
+
+@import "tailwindcss";
+
+/* ===============================================
+   Fast Retro-Inspired Design System for SiteProbe
+   =============================================== */
+
+@theme {
+  /* Retro color palette */
+  --color-cream: #FFFEF5;
+  --color-cream-dark: #F8F6EB;
+  --color-retro-purple: #8B5CF6;
+  --color-retro-purple-light: #EDE9FE;
+  --color-retro-orange: #F97316;
+  --color-retro-orange-light: #FFF7ED;
+  --color-retro-blue: #3B82F6;
+  --color-retro-blue-light: #EFF6FF;
+  --color-retro-green: #22C55E;
+  --color-retro-green-light: #F0FDF4;
+  --color-retro-yellow: #FACC15;
+  --color-retro-yellow-light: #FEFCE8;
+  --color-retro-pink: #EC4899;
+  --color-retro-pink-light: #FDF2F8;
+  --color-retro-red: #EF4444;
+  --color-retro-red-light: #FEF2F2;
+  --color-board-bg: #F5F3EB;
+  --color-dots: #D4D0C4;
+  
+  /* Typography */
+  --font-heading: 'Bricolage Grotesque', system-ui, sans-serif;
+  --font-mono: 'Space Mono', monospace;
+}
+
+@layer base {
+  html {
+    font-family: 'Bricolage Grotesque', system-ui, sans-serif;
+    -webkit-font-smoothing: antialiased;
+  }
+  
+  h1, h2, h3, h4 {
+    font-family: var(--font-heading);
+    font-weight: 800;
+    letter-spacing: -0.025em;
+  }
+  
+  code, pre, .font-mono {
+    font-family: var(--font-mono);
+  }
+  
+  button[type="submit"],
+  input[type="submit"] {
+    @apply bg-transparent border-0 p-0 m-0 font-normal;
+    appearance: none;
+    -webkit-appearance: none;
+  }
+  
+  input[type="text"],
+  input[type="email"],
+  input[type="password"] {
+    @apply bg-transparent;
+  }
+  
+  input:focus {
+    outline: none;
+  }
+}
+
+@layer utilities {
+  /* Dotted background pattern */
+  .bg-dotted {
+    background-image: radial-gradient(circle, var(--color-dots) 1px, transparent 1px);
+    background-size: 20px 20px;
+    background-color: var(--color-board-bg);
+  }
+  
+  /* Sticky note card base */
+  .sticky-card {
+    @apply bg-white rounded-sm shadow-md relative;
+    border: 1px solid rgba(0,0,0,0.05);
+  }
+  
+  /* Push pin effect (top) */
+  .pin-top::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 16px;
+    height: 16px;
+    background: linear-gradient(135deg, #EF4444 0%, #DC2626 100%);
+    border-radius: 50%;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2), inset 0 1px 2px rgba(255,255,255,0.3);
+  }
+  
+  /* Tape effect (top corners) */
+  .tape-corners::before,
+  .tape-corners::after {
+    content: '';
+    position: absolute;
+    top: -6px;
+    width: 40px;
+    height: 20px;
+    background: rgba(250, 204, 21, 0.7);
+    transform: rotate(-3deg);
+  }
+  .tape-corners::before { left: 10px; }
+  .tape-corners::after { right: 10px; transform: rotate(3deg); }
+  
+  /* Single tape strip */
+  .tape-top::before {
+    content: '';
+    position: absolute;
+    top: -8px;
+    left: 50%;
+    transform: translateX(-50%) rotate(-2deg);
+    width: 60px;
+    height: 24px;
+    background: rgba(250, 204, 21, 0.75);
+    border-radius: 1px;
+  }
+  
+  /* Diagonal stripes for card bottoms */
+  .stripes-purple {
+    background: repeating-linear-gradient(
+      135deg,
+      var(--color-retro-purple) 0px,
+      var(--color-retro-purple) 4px,
+      var(--color-retro-purple-light) 4px,
+      var(--color-retro-purple-light) 8px
+    );
+  }
+  
+  .stripes-orange {
+    background: repeating-linear-gradient(
+      135deg,
+      var(--color-retro-orange) 0px,
+      var(--color-retro-orange) 4px,
+      var(--color-retro-orange-light) 4px,
+      var(--color-retro-orange-light) 8px
+    );
+  }
+  
+  .stripes-blue {
+    background: repeating-linear-gradient(
+      135deg,
+      var(--color-retro-blue) 0px,
+      var(--color-retro-blue) 4px,
+      var(--color-retro-blue-light) 4px,
+      var(--color-retro-blue-light) 8px
+    );
+  }
+  
+  .stripes-green {
+    background: repeating-linear-gradient(
+      135deg,
+      var(--color-retro-green) 0px,
+      var(--color-retro-green) 4px,
+      var(--color-retro-green-light) 4px,
+      var(--color-retro-green-light) 8px
+    );
+  }
+  
+  .stripes-yellow {
+    background: repeating-linear-gradient(
+      135deg,
+      var(--color-retro-yellow) 0px,
+      var(--color-retro-yellow) 4px,
+      var(--color-retro-yellow-light) 4px,
+      var(--color-retro-yellow-light) 8px
+    );
+  }
+  
+  .stripes-red {
+    background: repeating-linear-gradient(
+      135deg,
+      var(--color-retro-red) 0px,
+      var(--color-retro-red) 4px,
+      var(--color-retro-red-light) 4px,
+      var(--color-retro-red-light) 8px
+    );
+  }
+  
+  .stripes-pink {
+    background: repeating-linear-gradient(
+      135deg,
+      var(--color-retro-pink) 0px,
+      var(--color-retro-pink) 4px,
+      var(--color-retro-pink-light) 4px,
+      var(--color-retro-pink-light) 8px
+    );
+  }
+  
+  /* Slight rotation variations for organic feel */
+  .rotate-subtle-left { transform: rotate(-1deg); }
+  .rotate-subtle-right { transform: rotate(1deg); }
+  .rotate-subtle-left-2 { transform: rotate(-2deg); }
+  .rotate-subtle-right-2 { transform: rotate(2deg); }
+  
+  /* Retro button styles */
+  .btn-retro {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-black text-white font-bold rounded-lg shadow-md;
+    @apply hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200;
+  }
+  
+  .btn-retro-yellow {
+    @apply inline-flex items-center gap-2 px-6 py-3 font-bold rounded-lg shadow-md;
+    background: var(--color-retro-yellow);
+    color: black;
+    @apply hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200;
+  }
+  
+  .btn-retro-outline {
+    @apply inline-flex items-center gap-2 px-6 py-3 bg-white text-black font-bold rounded-lg border-2 border-black;
+    @apply hover:bg-black hover:text-white transition-all duration-200;
+  }
+  
+  .btn-retro-purple {
+    @apply inline-flex items-center gap-2 px-6 py-3 font-bold rounded-lg shadow-md;
+    background: var(--color-retro-purple);
+    color: white;
+    @apply hover:shadow-lg hover:-translate-y-0.5 transition-all duration-200;
+  }
+  
+  /* Column header styling (retro board columns) */
+  .column-header {
+    @apply text-lg font-bold px-4 py-3 rounded-t-lg text-center uppercase tracking-wide;
+  }
+  
+  /* Status indicator dots with glow */
+  .status-dot-healthy {
+    @apply w-3 h-3 rounded-full bg-retro-green;
+    box-shadow: 0 0 8px rgba(34, 197, 94, 0.5);
+  }
+  
+  .status-dot-warning {
+    @apply w-3 h-3 rounded-full bg-retro-orange;
+    box-shadow: 0 0 8px rgba(249, 115, 22, 0.5);
+  }
+  
+  .status-dot-critical {
+    @apply w-3 h-3 rounded-full bg-retro-red;
+    box-shadow: 0 0 8px rgba(239, 68, 68, 0.5);
+  }
+  
+  .status-dot-info {
+    @apply w-3 h-3 rounded-full bg-retro-blue;
+    box-shadow: 0 0 8px rgba(59, 130, 246, 0.5);
+  }
+  
+  /* Card hover effect */
+  .card-hover {
+    @apply transition-all duration-200;
+  }
+  .card-hover:hover {
+    @apply shadow-lg -translate-y-1;
+  }
+  
+  /* Hand-drawn border effect (subtle) */
+  .hand-drawn {
+    border-radius: 255px 15px 225px 15px/15px 225px 15px 255px;
+  }
+}
+
+/* Animation for processing states */
+@keyframes pulse-dot {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(1.1); }
+}
+
+.animate-pulse-dot {
+  animation: pulse-dot 1.5s ease-in-out infinite;
+}
+
+/* Board column card container scroll styling */
+.card-column {
+  scrollbar-width: thin;
+  scrollbar-color: var(--color-dots) transparent;
+}
+
+.card-column::-webkit-scrollbar {
+  width: 6px;
+}
+
+.card-column::-webkit-scrollbar-track {
+  background: transparent;
+}
+
+.card-column::-webkit-scrollbar-thumb {
+  background: var(--color-dots);
+  border-radius: 3px;
+}

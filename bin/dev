@@ -1,0 +1,26 @@
+#!/usr/bin/env sh
+
+# Find foreman executable
+FOREMAN_CMD="foreman"
+if ! command -v foreman > /dev/null 2>&1; then
+  # Try to find foreman in gem bin directories
+  if [ -f ~/.local/share/gem/ruby/3.4.0/bin/foreman ]; then
+    FOREMAN_CMD="$HOME/.local/share/gem/ruby/3.4.0/bin/foreman"
+  elif [ -f ~/.gem/ruby/3.4.0/bin/foreman ]; then
+    FOREMAN_CMD="$HOME/.gem/ruby/3.4.0/bin/foreman"
+  else
+    echo "Foreman not found. Installing..."
+    gem install foreman
+    FOREMAN_CMD="foreman"
+  fi
+fi
+
+# Default to port 3000 if not specified
+export PORT="${PORT:-3000}"
+
+# Let the debug gem allow remote connections,
+# but avoid loading until `debugger` is called
+export RUBY_DEBUG_OPEN="true"
+export RUBY_DEBUG_LAZY="true"
+
+exec "$FOREMAN_CMD" start -f Procfile.dev "$@"

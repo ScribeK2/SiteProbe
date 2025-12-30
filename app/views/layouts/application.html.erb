@@ -1,0 +1,158 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <title><%= content_for(:title) || "SiteProbe" %></title>
+    <meta name="viewport" content="width=device-width,initial-scale=1">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="application-name" content="SiteProbe">
+    <meta name="mobile-web-app-capable" content="yes">
+    <%= csrf_meta_tags %>
+    <%= csp_meta_tag %>
+
+    <%= yield :head %>
+
+    <%# Enable PWA manifest for installable apps (make sure to enable in config/routes.rb too!) %>
+    <%#= tag.link rel: "manifest", href: pwa_manifest_path(format: :json) %>
+
+    <link rel="icon" href="/icon.png" type="image/png">
+    <link rel="icon" href="/icon.svg" type="image/svg+xml">
+    <link rel="apple-touch-icon" href="/icon.png">
+
+    <%# Includes TailwindCSS and other stylesheets %>
+    <%= stylesheet_link_tag "tailwind", "data-turbo-track": "reload" %>
+  </head>
+
+  <body class="bg-dotted text-black antialiased min-h-screen">
+    <%# Flash messages styled as sticky notes %>
+    <% if notice %>
+      <div class="fixed top-4 right-4 z-50 max-w-sm animate-[slideIn_0.3s_ease-out]">
+        <div class="sticky-card tape-top p-4 pt-6 bg-retro-green-light border-l-4 border-retro-green">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-retro-green" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/>
+            </svg>
+            <span class="text-sm font-semibold text-green-800"><%= notice %></span>
+          </div>
+        </div>
+      </div>
+    <% end %>
+    
+    <% if alert %>
+      <div class="fixed top-4 right-4 z-50 max-w-sm animate-[slideIn_0.3s_ease-out]">
+        <div class="sticky-card tape-top p-4 pt-6 bg-retro-red-light border-l-4 border-retro-red">
+          <div class="flex items-center gap-2">
+            <svg class="w-5 h-5 text-retro-red" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+              <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 8v4m0 4h.01M21 12a9 9 0 11-18 0 9 9 0 0118 0z"/>
+            </svg>
+            <span class="text-sm font-semibold text-red-800"><%= alert %></span>
+          </div>
+        </div>
+      </div>
+    <% end %>
+
+    <%# Navigation bar %>
+    <nav class="bg-white/80 backdrop-blur-sm border-b-2 border-black sticky top-0 z-40">
+      <div class="max-w-6xl mx-auto px-6">
+        <div class="flex justify-between items-center h-16">
+          <div class="flex items-center gap-8">
+            <%= link_to root_path, class: "flex items-center gap-2 group" do %>
+              <%# Logo icon %>
+              <div class="w-8 h-8 bg-black rounded-lg flex items-center justify-center group-hover:rotate-6 transition-transform">
+                <svg class="w-5 h-5 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+                </svg>
+              </div>
+              <span class="text-xl font-extrabold tracking-tight">SiteProbe</span>
+            <% end %>
+            
+            <% if user_signed_in? %>
+              <div class="hidden md:flex items-center gap-1">
+                <%= link_to dashboard_path, class: "px-4 py-2 text-sm font-semibold rounded-lg hover:bg-retro-purple-light hover:text-retro-purple transition-colors" do %>
+                  Dashboard
+                <% end %>
+                <%= link_to new_check_path, class: "px-4 py-2 text-sm font-semibold rounded-lg hover:bg-retro-yellow-light hover:text-amber-700 transition-colors" do %>
+                  + New Check
+                <% end %>
+                <%= link_to checks_path, class: "px-4 py-2 text-sm font-semibold rounded-lg hover:bg-retro-blue-light hover:text-retro-blue transition-colors" do %>
+                  History
+                <% end %>
+              </div>
+            <% end %>
+          </div>
+          
+          <div class="flex items-center gap-4">
+            <% if user_signed_in? %>
+              <div class="hidden sm:flex items-center gap-3">
+                <div class="flex items-center gap-2 px-3 py-1.5 bg-cream rounded-full">
+                  <div class="w-2 h-2 rounded-full bg-retro-green"></div>
+                  <span class="text-xs font-mono text-gray-600"><%= current_user.email.truncate(20) %></span>
+                </div>
+                <%= link_to destroy_user_session_path, data: { turbo_method: :delete }, 
+                    class: "text-sm font-semibold text-gray-500 hover:text-black transition-colors" do %>
+                  Sign out
+                <% end %>
+              </div>
+              
+              <%# Mobile menu button %>
+              <button type="button" class="md:hidden p-2 rounded-lg hover:bg-gray-100" onclick="document.getElementById('mobile-menu').classList.toggle('hidden')">
+                <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                  <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"/>
+                </svg>
+              </button>
+            <% else %>
+              <%= link_to "Sign in", new_user_session_path, class: "btn-retro-outline text-sm py-2" %>
+            <% end %>
+          </div>
+        </div>
+        
+        <%# Mobile menu %>
+        <% if user_signed_in? %>
+          <div id="mobile-menu" class="hidden md:hidden pb-4 border-t border-gray-200 pt-4">
+            <div class="flex flex-col gap-2">
+              <%= link_to "Dashboard", dashboard_path, class: "px-4 py-2 text-sm font-semibold rounded-lg hover:bg-gray-100" %>
+              <%= link_to "+ New Check", new_check_path, class: "px-4 py-2 text-sm font-semibold rounded-lg hover:bg-gray-100" %>
+              <%= link_to "History", checks_path, class: "px-4 py-2 text-sm font-semibold rounded-lg hover:bg-gray-100" %>
+              <hr class="my-2">
+              <div class="px-4 py-2 text-xs text-gray-500"><%= current_user.email %></div>
+              <%= link_to "Sign out", destroy_user_session_path, data: { turbo_method: :delete }, 
+                  class: "px-4 py-2 text-sm font-semibold text-red-600 rounded-lg hover:bg-red-50" %>
+            </div>
+          </div>
+        <% end %>
+      </div>
+    </nav>
+
+    <main class="max-w-6xl mx-auto px-6 py-12">
+      <%= yield %>
+    </main>
+    
+    <%# Footer %>
+    <footer class="border-t-2 border-black bg-white/80 mt-auto">
+      <div class="max-w-6xl mx-auto px-6 py-8">
+        <div class="flex flex-col md:flex-row justify-between items-center gap-4">
+          <div class="flex items-center gap-2">
+            <div class="w-6 h-6 bg-black rounded flex items-center justify-center">
+              <svg class="w-4 h-4 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24">
+                <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/>
+              </svg>
+            </div>
+            <span class="font-bold">SiteProbe</span>
+          </div>
+          <div class="text-sm text-gray-500">
+            Domain health diagnostics, done right.
+          </div>
+        </div>
+      </div>
+    </footer>
+
+    <%= turbo_include_tags %>
+    <%= javascript_importmap_tags %>
+    
+    <style>
+      @keyframes slideIn {
+        from { transform: translateX(100%); opacity: 0; }
+        to { transform: translateX(0); opacity: 1; }
+      }
+    </style>
+  </body>
+</html>
